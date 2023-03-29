@@ -1,6 +1,9 @@
 import React, { FC, useRef } from 'react'
 import * as echarts from 'echarts'
 import { format } from 'date-fns'
+import { Item } from './styled/styledItem'
+import { Box, Paper } from '@mui/material'
+import { theme } from '../theme'
 
 type WeatherChartProps = {
   // weatherData: { date: Date; temperature: number }[]
@@ -123,8 +126,22 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
   }
 
   return (
-    <>
-      <div ref={chartRef} style={{ width: '100%', height: 400 }} />
-    </>
+    <Item
+      sx={{
+        backgroundColor: (theme) => theme.palette.background.paper,
+        borderRadius: 2,
+        mt: 3,
+      }}
+    >
+      <div
+        ref={chartRef}
+        style={{
+          width: '100%',
+          height: 400,
+          backgroundColor: theme.palette.background.paper,
+          overflow: 'hidden',
+        }}
+      />
+    </Item>
   )
 }

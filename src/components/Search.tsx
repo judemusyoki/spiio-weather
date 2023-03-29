@@ -12,7 +12,7 @@ export const Search = ({ onSearchChange }: SearchProps) => {
 
   const loadOptions = (inputValue) => {
     return fetch(
-      `${process.env.REACT_APP_GEO_API_URL}/cities?minPopulation=1000000&namePrefix=${inputValue}`,
+      `${process.env.REACT_APP_GEO_API_URL}/cities?minPopulation=100000&namePrefix=${inputValue}`,
       GEO_API_OPTIONS,
     )
       .then((response) => response.json())
