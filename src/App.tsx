@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from 'react'
-import WeatherChart from './WeatherChart'
-import { useWeatherData } from './lib/useWeatherData'
-import { Search } from './components/Search'
+import { GEO_API_OPTIONS, useWeatherData } from './lib'
+import { Search, WeatherChart } from './components'
 import { Box } from '@mui/material'
 
 function App() {
