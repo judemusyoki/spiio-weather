@@ -1,5 +1,5 @@
 import * as echarts from 'echarts'
-import { WeatherData } from 'lib'
+import { WeatherChartData } from 'types'
 
 import React, { FC, useRef } from 'react'
 
@@ -7,7 +7,7 @@ import { theme } from '../theme'
 import { Item } from './styled/styledItem'
 
 type WeatherChartProps = {
-  data: WeatherData[]
+  data: WeatherChartData[]
 }
 
 export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
@@ -15,7 +15,7 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
 
   if (chartRef.current && data) {
     const chart = echarts.init(chartRef.current)
-    const temperatures = data.map((d) => d.temperature)
+    const temperatures = data.map((d) => d.temp)
     const rain = data.map((d) => d.rain)
 
     const minTemperature = Math.min(...temperatures)

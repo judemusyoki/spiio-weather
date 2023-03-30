@@ -1,27 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { filterChartData } from 'lib'
+import { Coordinates, WeatherChartData, WeatherData } from 'types'
 
 import { useState, useEffect } from 'react'
 
 import axios from 'axios'
 
-export type Coordinates = {
-  lat: string
-  lon: string
-}
-
-export type WeatherData = {
-  date: string
-  temperature: any
-  maxTemp: any
-  minTemp: any
-  rain: number
-}
-
 type WeatherHook = {
   loading: boolean
   error: string | null
-  data: any | null
+  data: WeatherChartData[]
 }
 
 /**
@@ -36,7 +24,7 @@ export const useWeatherData = ({ lat, lon }: Coordinates): WeatherHook => {
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [data, setData] = useState<WeatherData[] | null>(null)
+  const [data, setData] = useState<WeatherChartData[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +32,7 @@ export const useWeatherData = ({ lat, lon }: Coordinates): WeatherHook => {
         const response = await axios.get(
           `${process.env.REACT_APP_OPEN_WEATHER_BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`,
         )
-        const dataList = await response.data.list
+        const dataList: WeatherData[] = await response.data.list
 
         const filteredData = filterChartData(dataList)
         setData(filteredData)

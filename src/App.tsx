@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { WeatherChartData } from 'types'
 import { LoadingComponent } from 'util/LoadingComponent'
 
 import React, { useEffect, useState } from 'react'
@@ -8,13 +9,13 @@ import { Box, Stack, Typography } from '@mui/material'
 import { Search, WeatherChart } from './components'
 import { Item } from './components/styled/styledItem'
 import { Layout } from './layout'
-import { WeatherData, useWeatherData } from './lib'
+import { useWeatherData } from './lib'
 
 function App() {
   const [latitude, setLatitude] = useState('56.1456096')
   const [longitude, setLongitude] = useState('10.1923257')
   const [city, setCity] = useState('No City Selected')
-  const [forecast, setForecast] = useState<WeatherData[]>([])
+  const [forecast, setForecast] = useState<WeatherChartData[]>([])
   const [fetching, setFetching] = useState<boolean>(true)
 
   const { loading, data } = useWeatherData({

@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { WeatherChartData, WeatherData } from 'types'
 
 import { getRainData } from './getRainData'
 
@@ -7,7 +8,7 @@ import { getRainData } from './getRainData'
  * @param data weather data fetched from openweatherapi
  * @returns object containing data for echart
  */
-export const filterChartData = (data) => {
+export const filterChartData = (data: WeatherData[]): WeatherChartData[] => {
   const filteredChartData = data?.map((weatherItem) => {
     const itemDate = new Date(weatherItem.dt * 1000)
     const dayAbbreviation: string = format(itemDate, 'EEE')
@@ -15,7 +16,7 @@ export const filterChartData = (data) => {
 
     return {
       date: dayAbbreviation,
-      temperature: weatherItem.main.temp,
+      temp: weatherItem.main.temp,
       maxTemp: weatherItem.main.temp_max,
       minTemp: weatherItem.main.temp_min,
       rain: rain,
