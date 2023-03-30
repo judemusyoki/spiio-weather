@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { filterChartData } from 'lib'
+
 import { useState, useEffect } from 'react'
+
 import axios from 'axios'
 
 export type Coordinates = {
@@ -7,8 +10,12 @@ export type Coordinates = {
   lon: string
 }
 
-type WeatherData = {
-  data: any
+export type WeatherData = {
+  date: string
+  temperature: any
+  maxTemp: any
+  minTemp: any
+  rain: number
 }
 
 type WeatherHook = {
@@ -17,13 +24,19 @@ type WeatherHook = {
   data: any | null
 }
 
+/**
+ * hook using latitude & longitude to fetch weather data from openweatherapi
+ * @param lat latitude
+ * @param lon longitude
+ * @returns weather forecast data
+ */
 export const useWeatherData = ({ lat, lon }: Coordinates): WeatherHook => {
   const apiKey = process.env.REACT_APP_OPENWEATHERMAP_API_KEY
   const units = 'metric'
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [data, setData] = useState<any | null>(null)
+  const [data, setData] = useState<WeatherData[] | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +44,10 @@ export const useWeatherData = ({ lat, lon }: Coordinates): WeatherHook => {
         const response = await axios.get(
           `${process.env.REACT_APP_OPEN_WEATHER_BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`,
         )
-        setData(response.data.list)
+        const dataList = await response.data.list
+
+        const filteredData = filterChartData(dataList)
+        setData(filteredData)
       } catch (error) {
         //@ts-ignore
         setError(error.message)

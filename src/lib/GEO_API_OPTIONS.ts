@@ -1,3 +1,6 @@
+/**
+ * header parameters to authorize api calls to RapiApi to access GeoDB Cities Api
+ */
 export const GEO_API_OPTIONS = {
   method: 'GET',
   headers: {

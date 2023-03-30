@@ -9,6 +9,7 @@ declare module '@mui/material/styles' {
     textColor: {
       primary: string
       secondary: string
+      light: string
     }
   }
   interface PaletteOptions {
@@ -19,6 +20,7 @@ declare module '@mui/material/styles' {
     textColor: {
       primary: string
       secondary: string
+      light: string
     }
   }
 }
@@ -33,6 +35,7 @@ const theme = createTheme({
     textColor: {
       primary: '#11142D',
       secondary: '#808191',
+      light: '#EFEFEF',
     },
     background: {
       default: '#E5E5E5',

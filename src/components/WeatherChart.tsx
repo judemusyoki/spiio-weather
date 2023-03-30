@@ -1,43 +1,22 @@
-import React, { FC, useRef } from 'react'
 import * as echarts from 'echarts'
-import { format } from 'date-fns'
-import { Item } from './styled/styledItem'
-import { Box, Paper } from '@mui/material'
+import { WeatherData } from 'lib'
+
+import React, { FC, useRef } from 'react'
+
 import { theme } from '../theme'
+import { Item } from './styled/styledItem'
 
 type WeatherChartProps = {
-  // weatherData: { date: Date; temperature: number }[]
-  data: any[]
-}
-
-const getRain = (weatherItem) => {
-  if (!weatherItem.rain) return 0
-  const rainObj = weatherItem.rain
-  const rainValues = Object.values(rainObj)[0]
-  return rainValues
+  data: WeatherData[]
 }
 
 export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
   const chartRef = useRef<HTMLDivElement>(null)
 
-  const filteredData = data?.map((weatherItem) => {
-    const itemDate = new Date(weatherItem.dt * 1000)
-    const dayAbbreviation: string = format(itemDate, 'EEE')
-    const rain = getRain(weatherItem)
-
-    return {
-      date: dayAbbreviation,
-      temperature: weatherItem.main.temp,
-      maxTemp: weatherItem.main.temp_max,
-      minTemp: weatherItem.main.temp_min,
-      rain: rain,
-    }
-  })
-
-  if (chartRef.current && filteredData) {
+  if (chartRef.current && data) {
     const chart = echarts.init(chartRef.current)
-    const temperatures = filteredData.map((d) => d.temperature)
-    const rain = filteredData.map((d) => d.rain) as any[]
+    const temperatures = data.map((d) => d.temperature)
+    const rain = data.map((d) => d.rain)
 
     const minTemperature = Math.min(...temperatures)
     const maxTemperature = Math.max(...temperatures)
@@ -69,13 +48,13 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
       },
       xAxis: {
         type: 'category',
-        data: Array.from(new Set(filteredData.map((d) => d.date))),
+        data: Array.from(new Set(data.map((d) => d.date))),
       },
       yAxis: [
         {
           type: 'value',
           min: Math.floor(minTemperature),
-          max: Math.ceil(maxTemperature),
+          max: Math.ceil(maxTemperature) + 7,
           axisLabel: {
             formatter: '{value} °C',
           },
@@ -93,7 +72,7 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
       series: [
         {
           name: 'Highest Temp',
-          data: filteredData.map((d) => d.maxTemp),
+          data: data.map((d) => d.maxTemp),
           type: 'line',
           markPoint: {
             data: [
@@ -107,7 +86,7 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
         },
         {
           name: 'Lowest Temp',
-          data: filteredData.map((d) => d.minTemp),
+          data: data.map((d) => d.minTemp),
           type: 'line',
         },
         {
@@ -117,7 +96,7 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
           emphasis: {
             focus: 'series',
           },
-          data: filteredData.map((d) => d.rain),
+          data: data.map((d) => d.rain),
           yAxisIndex: 1,
         },
       ],
@@ -137,7 +116,7 @@ export const WeatherChart: FC<WeatherChartProps> = ({ data }) => {
         ref={chartRef}
         style={{
           width: '100%',
-          height: 400,
+          minHeight: 400,
           backgroundColor: theme.palette.background.paper,
           overflow: 'hidden',
         }}
